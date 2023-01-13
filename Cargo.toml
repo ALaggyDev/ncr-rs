@@ -1,0 +1,37 @@
+[package]
+name = "ncr"
+description = "Rust implementation of chat encryption in the Minecraft mod No Chat Reports"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/ALaggyDev/ncr-rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+pbkdf2 = { version = "0.11.0", default-features = false, optional = true }
+hmac = { version = "0.12.1", optional = true }
+sha1 = { version = "0.10.5", optional = true }
+rand = "0.8.5"
+aes = "0.8.2"
+cipher = { version = "0.4.3", features = [
+    "alloc",
+    "block-padding",
+], optional = true }
+cfb8 = { version = "0.8.1", optional = true }
+aes-gcm = { version = "0.10.1", features = ["aes"], optional = true }
+subtle = { version = "2.4.1", optional = true }
+base64 = "0.21.0"
+phf = "0.11.1"
+
+[features]
+default = ["passphrase"]
+passphrase = ["dep:pbkdf2", "dep:hmac", "dep:sha1"]
+cfb8 = ["dep:cfb8"]
+ecb = ["dep:cipher"]
+gcm = ["dep:aes-gcm", "dep:subtle"]
+
+# Docs.rs specific configuration
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]

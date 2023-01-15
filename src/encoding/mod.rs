@@ -33,7 +33,7 @@ mod sus16;
 use crate::NcrError;
 
 pub use self::base64::Base64Encoding;
-pub use base64r::Base64rEncoding;
+pub use base64r::{Base64rEncoding, NewBase64rEncoding};
 pub use mc256::Mc256Encoding;
 pub use sus16::Sus16Encoding;
 

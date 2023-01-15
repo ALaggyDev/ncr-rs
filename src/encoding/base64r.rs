@@ -5,7 +5,8 @@ use crate::NcrError;
 
 /// The base64r encoding, made by [No Chat Reports](https://github.com/HKS-HNS/No-Chat-Reports).
 ///
-/// See [No Chat Reports](https://github.com/HKS-HNS/No-Chat-Reports).
+/// In Minecraft 1.19.3, the character `¸` is changed to `×`.
+/// If you are using 1.19.3 or above, please use [NewBase64rEncoding] instead.
 #[derive(Debug)]
 pub struct Base64rEncoding;
 
@@ -26,6 +27,48 @@ impl Encoding for Base64rEncoding {
 
         for ch in text.chars() {
             output.push(*BASE64R_DECODE.get(&ch).ok_or(NcrError::DecodeError)?);
+        }
+
+        STANDARD.decode(output).map_err(|_| NcrError::DecodeError)
+    }
+}
+
+/// The new base64r encoding, made by [No Chat Reports](https://github.com/HKS-HNS/No-Chat-Reports).
+///
+/// In Minecraft 1.19.3, the character `¸` is changed to `×`.
+/// If you are using 1.19.2, please use [Base64rEncoding] instead.
+#[derive(Debug)]
+pub struct NewBase64rEncoding;
+
+impl Encoding for NewBase64rEncoding {
+    fn encode(text: &[u8]) -> String {
+        let encoded = STANDARD.encode(text);
+        let mut output = String::new();
+
+        for ch in encoded.chars() {
+            let new_ch = if ch == 'x' {
+                '×'
+            } else {
+                unsafe { *BASE64R_ENCODE.get(&ch).unwrap_unchecked() }
+            };
+
+            output.push(new_ch);
+        }
+
+        output
+    }
+
+    fn decode(text: &str) -> Result<Vec<u8>, NcrError> {
+        let mut output = String::new();
+
+        for ch in text.chars() {
+            let new_ch = if ch == '×' {
+                'x'
+            } else {
+                *BASE64R_DECODE.get(&ch).ok_or(NcrError::DecodeError)?
+            };
+
+            output.push(new_ch);
         }
 
         STANDARD.decode(output).map_err(|_| NcrError::DecodeError)

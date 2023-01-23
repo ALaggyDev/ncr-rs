@@ -29,6 +29,9 @@ impl<E: Encoding> Cfb8Encryption<E> {
     }
 
     fn raw_decrypt(ciphertext: Vec<u8>, key: &AesKey) -> Result<String, NcrError> {
+        if ciphertext.len() < 8 {
+            return Err(NcrError::DecryptError);
+        }
         let nonce: [u8; 8] = ciphertext[..8].try_into().unwrap();
 
         let iv = generate_iv(u64::from_be_bytes(nonce));

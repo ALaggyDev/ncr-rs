@@ -9,18 +9,17 @@ repository = "https://github.com/ALaggyDev/ncr-rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-pbkdf2 = { version = "0.11.0", default-features = false, optional = true }
+pbkdf2 = { version = "0.12.1", default-features = false, optional = true }
 hmac = { version = "0.12.1", optional = true }
 sha1 = { version = "0.10.5", optional = true }
 rand = "0.8.5"
 aes = { version = "0.8.2", optional = true }
-cipher = { version = "0.4.3", features = [
+cipher = { version = "0.4.4", features = [
     "alloc",
     "block-padding",
 ], optional = true }
 cfb8 = { version = "0.8.1", optional = true }
-aes-gcm = { version = "0.10.1", features = ["aes"], optional = true }
-subtle = { version = "2.4.1", optional = true }
+aes-gcm = { version = "0.10.2", optional = true }
 base64 = "0.21.0"
 phf = "0.11.1"
 
@@ -29,7 +28,7 @@ default = ["passphrase"]
 passphrase = ["dep:pbkdf2", "dep:hmac", "dep:sha1"]
 cfb8 = ["dep:aes", "dep:cfb8"]
 ecb = ["dep:aes", "dep:cipher"]
-gcm = ["dep:aes", "dep:aes-gcm", "dep:subtle"]
+gcm = ["dep:aes", "dep:aes-gcm"]
 
 # Docs.rs specific configuration
 [package.metadata.docs.rs]

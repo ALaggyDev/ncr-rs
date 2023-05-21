@@ -30,7 +30,7 @@ impl AesKey {
     #[cfg(feature = "passphrase")]
     pub fn gen_from_passphrase(passphrase: &[u8]) -> Self {
         let mut key = [0u8; 16];
-        pbkdf2::pbkdf2::<hmac::Hmac<sha1::Sha1>>(passphrase, &SALT, 65536, &mut key);
+        pbkdf2::pbkdf2::<hmac::Hmac<sha1::Sha1>>(passphrase, &SALT, 65536, &mut key).unwrap();
 
         Self(key)
     }

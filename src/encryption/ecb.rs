@@ -11,6 +11,16 @@ use crate::{encoding::Encoding, AesKey, NcrError};
 #[derive(Debug)]
 pub struct EcbEncryption<E: Encoding>(PhantomData<E>);
 
+// Aes/Ecb encryption:
+// This diagram shows the raw bytes used before encoding (and after decoding).
+// 
+// |     Var      | (bytes)
+// |  Ciphertext  |
+// |--------------|
+//
+// Where:
+//     Ciphertext is the plaintext after encryption (same length as plaintext).
+
 impl<E: Encoding> EcbEncryption<E> {
     fn raw_encrypt(plaintext: &[u8], key: &AesKey) -> Vec<u8> {
         let cipher = Aes128Enc::new(key.as_ref().into());

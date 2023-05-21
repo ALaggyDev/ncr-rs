@@ -13,6 +13,18 @@ use crate::{encoding::Encoding, AesKey, NcrError};
 #[derive(Debug)]
 pub struct GcmEncryption<E: Encoding>(PhantomData<E>);
 
+// Aes/Gcm encryption:
+// This diagram shows the raw bytes used before encoding (and after decoding).
+// 
+// |  12  -     Var      -  12   | (bytes)
+// |  IV  |  Ciphertext  |  Tag  |
+// |-----------------------------|
+//
+// Where:
+//     IV (or Nonce) is used for encryption.
+//     Ciphertext is the plaintext after encryption (same length as plaintext).
+//     Tag is the GCM Authorization Tag (decryption would fail if tag doesn't match).
+
 impl<E: Encoding> GcmEncryption<E> {
     fn raw_encrypt(plaintext: &[u8], key: &AesKey) -> Vec<u8> {
         let mut output = Vec::with_capacity(plaintext.len() + 24);

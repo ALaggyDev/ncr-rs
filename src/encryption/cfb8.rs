@@ -13,6 +13,17 @@ use crate::{encoding::Encoding, AesKey, NcrError};
 #[derive(Debug)]
 pub struct Cfb8Encryption<E: Encoding>(PhantomData<E>);
 
+// Aes/Cfb8 encryption:
+// This diagram shows the raw bytes used before encoding (and after decoding).
+// 
+// |    8    -     Var      | (bytes)
+// |  Nonce  |  Ciphertext  |
+// |------------------------|
+//
+// Where:
+//     Nonce is fed into java.util.Random as seed to generate IV, which is used for encryption.
+//     Ciphertext is the plaintext after encryption (same length as plaintext).
+
 impl<E: Encoding> Cfb8Encryption<E> {
     fn raw_encrypt(plaintext: &[u8], key: &AesKey) -> Vec<u8> {
         let mut output = Vec::with_capacity(8 + plaintext.len());

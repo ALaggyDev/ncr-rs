@@ -59,6 +59,12 @@
 //!  - `ecb`: Enable aes/ecb encryption.
 //!  - `gcm`: Enable aes/gcm encryption.
 //!
+//! # How NCR encrypt chat messages
+//! 1. Two characters `#%` will be prepended to every message.
+//! 2. The string is fed into one of the encryption algorithms.
+//! 3. The encrypted bytes are fed into one of the encoding algorithms to turn them into sendable Minecraft messages.
+//! 
+//! The reversal is done on decryption.
 
 #![cfg_attr(docsrs, feature(doc_auto_cfg))]
 
